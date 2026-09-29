@@ -64,9 +64,9 @@ function Test-HealthThresholds {
     }
 
     $result = [pscustomobject]@{
-        overallStatus = $maxSeverity
+        overallStatus = $state.maxSeverity
         alerts        = $alerts.ToArray()
-        exitCode      = if ($maxSeverity -eq 'critical') { 1 } else { 0 }
+        exitCode      = if ($state.maxSeverity -eq 'critical') { 1 } else { 0 }
     }
 
     if ($PassThru) {
