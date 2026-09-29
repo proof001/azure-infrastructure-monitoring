@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'cursor/**']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze-and-test:
+    name: PSScriptAnalyzer + Pester
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        uses: actions/setup-powershell@v1
+        with:
+          pwsh-version: '7.4'
+
+      - name: Install Pester
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module -Name Pester -MinimumVersion 5.5.0 -Force -Scope CurrentUser -SkipPublisherCheck
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -MinimumVersion 1.21.0 -Force -Scope CurrentUser -SkipPublisherCheck
+
+      - name: PSScriptAnalyzer (src and scripts)
+        shell: pwsh
+        run: |
+          $paths = @('./src', './scripts')
+          $results = Invoke-ScriptAnalyzer -Path $paths -Recurse -Severity Error, Warning
+          $results | Format-Table -AutoSize
+          if ($results.Where({ $_.Severity -eq 'Error' }).Count -gt 0) {
+            throw 'PSScriptAnalyzer reported errors.'
+          }
+
+      - name: Pester tests
+        shell: pwsh
+        run: |
+          $config = New-PesterConfiguration
+          $config.Run.Path = './tests'
+          $config.Output.Verbosity = 'Detailed'
+          $config.TestResult.Enabled = $true
+          $config.TestResult.OutputPath = 'TestResults.xml'
+          Invoke-Pester -Configuration $config
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pester-results
+          path: TestResults.xml
+
+      # Phase 1 guardrail: no deploy, no Azure login, no publish steps.

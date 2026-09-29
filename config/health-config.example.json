@@ -1,0 +1,22 @@
+{
+  "$schemaNote": "EXAMPLE ONLY — do not commit real secrets or production values.",
+  "description": "Copy to config/health-config.local.json (gitignored) or pass -ConfigPath explicitly for local runs.",
+  "thresholds": {
+    "cpuPercentWarning": 80,
+    "cpuPercentCritical": 95,
+    "memoryPercentWarning": 85,
+    "memoryPercentCritical": 95,
+    "diskPercentWarning": 80,
+    "diskPercentCritical": 90
+  },
+  "reporting": {
+    "outputDirectory": "reports",
+    "fileNamePrefix": "health-report",
+    "formats": ["json", "html"]
+  },
+  "checks": {
+    "includeCpu": true,
+    "includeMemory": true,
+    "includeDisk": true
+  }
+}
