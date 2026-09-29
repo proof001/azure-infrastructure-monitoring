@@ -43,8 +43,10 @@ jobs:
       - name: PSScriptAnalyzer (src and scripts)
         shell: pwsh
         run: |
-          $paths = @('./src', './scripts')
-          $results = Invoke-ScriptAnalyzer -Path $paths -Recurse -Severity Error, Warning
+          $results = @()
+          foreach ($path in @('./src', './scripts')) {
+            $results += Invoke-ScriptAnalyzer -Path $path -Recurse -Severity Error, Warning
+          }
           $results | Format-Table -AutoSize
           if ($results.Where({ $_.Severity -eq 'Error' }).Count -gt 0) {
             throw 'PSScriptAnalyzer reported errors.'
