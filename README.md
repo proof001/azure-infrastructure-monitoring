@@ -1,6 +1,6 @@
 # Azure Infrastructure and Monitoring Automation
 
-Portfolio project by **Proof Higgins** (IT Systems Administrator → DevOps). This repository automates infrastructure health visibility and reporting. **Phase 1 is entirely local**: PowerShell collects OS metrics, validates configuration, evaluates thresholds, and writes JSON/HTML reports. **No Azure subscriptions, billing, or public publishing** are used in Phase 1.
+Portfolio project by **Proof Higgins** (IT Systems Administrator → DevOps). This repository automates infrastructure health visibility and reporting. The **repository is public** for portfolio visibility. **Phase 1 is entirely local**: PowerShell collects OS metrics, validates configuration, evaluates thresholds, and writes JSON/HTML reports. Phase 1 does **not** use Azure subscriptions, billing, or deploy any cloud resources.
 
 ## Phase 1 scope (current)
 
@@ -74,9 +74,9 @@ There is **no** deploy job, **no** Azure login, and **no** artifact publish to p
 
 ## Security and privacy
 
-- Keep this repository **private**; do not commit secrets or production connection strings.
-- Use `config/health-config.example.json` as a template only; local overrides belong in gitignored `*.local.json` files.
-- Generated reports may contain hostnames and metrics — treat `reports/` as sensitive if copied off-machine.
+- This is a **public** portfolio repository: do not commit secrets, API keys, or production connection strings.
+- Use `config/health-config.example.json` as a template only; local overrides belong in gitignored `*.local.json` files and must stay out of git.
+- Generated reports may contain hostnames and host metrics — treat `reports/` as sensitive if copied off-machine or shared.
 
 ## License / attribution
 
