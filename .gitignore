@@ -1,0 +1,27 @@
+# Generated health reports (Phase 1 local output)
+reports/*
+!reports/.gitkeep
+
+# Local config overrides (may contain environment-specific paths)
+config/*.local.json
+config/*.local.yaml
+config/health-config.json
+config/health-config.yaml
+**/secrets.*
+**/*.secret.json
+
+# PowerShell
+*.log
+*.tmp
+ModuleAnalysisCache-*
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Pester / test artifacts
+TestResults.xml
+Coverage.xml
+.pester/
