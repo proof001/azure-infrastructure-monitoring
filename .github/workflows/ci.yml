@@ -21,10 +21,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup PowerShell
-        uses: PowerShell/actions/setup-powershell@v1
-        with:
-          pwsh-version: '7.4'
+      - name: Verify PowerShell 7
+        shell: pwsh
+        run: |
+          if ($PSVersionTable.PSVersion.Major -lt 7) {
+            throw 'PowerShell 7+ is required.'
+          }
+          $PSVersionTable.PSVersion.ToString()
 
       - name: Install Pester
         shell: pwsh
