@@ -17,17 +17,16 @@ function Test-HealthThresholds {
     )
 
     $alerts = [System.Collections.Generic.List[object]]::new()
-    $maxSeverity = 'ok'
+    $state = @{ maxSeverity = 'ok' }
 
     function Add-Alert {
         param([string]$Severity, [string]$Message)
         $alerts.Add([pscustomobject]@{ severity = $Severity; message = $Message })
-        $script:maxSeverity = switch ($Severity) {
-            'critical' { 'critical' }
-            'warning' {
-                if ($script:maxSeverity -ne 'critical') { 'warning' } else { $script:maxSeverity }
-            }
-            default { $script:maxSeverity }
+        if ($Severity -eq 'critical') {
+            $state.maxSeverity = 'critical'
+        }
+        elseif ($Severity -eq 'warning' -and $state.maxSeverity -ne 'critical') {
+            $state.maxSeverity = 'warning'
         }
         $color = switch ($Severity) {
             'critical' { 'Red' }

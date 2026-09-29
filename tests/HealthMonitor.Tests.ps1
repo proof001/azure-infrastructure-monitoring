@@ -25,7 +25,7 @@ Describe 'Test-HealthConfig' {
         $bad = New-TemporaryFile
         try {
             @{ reporting = @{ outputDirectory = 'reports' } } | ConvertTo-Json | Set-Content -LiteralPath $bad
-            { Test-HealthConfig -Path $bad } | Should -Throw 'thresholds'
+            { Test-HealthConfig -Path $bad } | Should -Throw '*thresholds*'
         }
         finally {
             Remove-Item -LiteralPath $bad -Force -ErrorAction SilentlyContinue
